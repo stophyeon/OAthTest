@@ -1,16 +1,19 @@
 package com.example.OAthTest.jwt;
 
+import com.example.OAthTest.dto.MemberDetails;
+import com.example.OAthTest.service.MemberDetailService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -21,20 +24,22 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class JwtProvider {
+public class JwtProvider{
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;
     private final Key key;
+    private final MemberDetailService memberDetailService;
 
 
-    public JwtProvider(@Value("${jwt.secret}") String secretKey) {
-        log.info("JWT 생성");
+    public JwtProvider(@Value("${jwt.secret}") String secretKey, MemberDetailService memberDetailService) {
+        this.memberDetailService = memberDetailService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
     public JwtDto createToken(Authentication authentication){
+        log.info("JWT 생성");
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -95,9 +100,9 @@ public class JwtProvider {
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(),"",authorities);
+        MemberDetails principal = memberDetailService.loadUserByUsername(claims.getSubject());
 
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal.getUsername(), principal.getPassword(), authorities);
 
     }
     private Claims parseClaims(String accessToken) {
@@ -107,4 +112,6 @@ public class JwtProvider {
             return e.getClaims();
         }
     }
+
+
 }
