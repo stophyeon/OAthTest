@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyMovie 로그인 페이지</title>
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./login.css">
+</head>
+<body>
+<h1 class="a11y-hidden">MyMovie</h1>
+
+<main>
+    <header>
+        <h2>로그인 또는 회원가입</h2>
+
+            <button type="button" class="btn-x"></button>
+
+    </header>
+
+    <!-- 메인 section -->
+    <section class="main-sec">
+        <div class="wrapper">
+            <h3>MyMovie에서 여러분의 영화를 찾으세요! :) </h3>
+
+            <form class="wrapper-idpw">
+                <input type="text" id="inpID" class="inp ID" placeholder="아이디"></input>
+                <label for="inpID" class=""></label>
+
+                <p class="error ID">아이디를 입력해 주세요</p>
+
+                <input type="password" id="inpPS" class="inp PS" placeholder="비밀번호"></input>
+                <label for="inpPS" class=""></label>
+            </form>
+        </div>
+
+
+        <input type="checkbox" id="inpHold" class="inphold txt-hide">
+        <label for="inpHold" class="labl-hold">로그인 상태 유지</label>
+
+
+        <button class="btn-login">로그인</button>
+
+        <div class="side-tool">
+            <button>회원가입</button>
+            <p>|</p>
+            <button>아이디/비밀번호 찾기</button>
+        </div>
+    </section>
+
+    <p class="line">또는</p>
+
+    <ul class="difLogin">
+        <li><a href="https://nid.naver.com/oauth2.0/authorize?client_id=3OGCudku4yOAQaRE_ou3&response_type=code&redirect_uri=http://localhost:8080/login/oauth2/code/naver" class="naver">네이버 계정으로 로그인</a></li>
+        <li><a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=b9759cba8e0cdd5bcdb9d601f5a10ac1&redirect_uri=http://localhost:8080/login/oauth2/code/kakao" class="kakao">카카오톡 계정으로 로그인</a> </li>
+    </ul>
+</main>
+
+</body>
+</html>

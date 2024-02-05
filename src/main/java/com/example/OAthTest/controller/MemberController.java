@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class MemberController {
         this.memberService = memberService;
         this.jwtLoginService = jwtLoginService;
     }
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtDto> login(@RequestBody MemberDto memberDto){
         JwtDto jwt = jwtLoginService.loginMember(memberDto);
         return ResponseEntity.status(HttpStatus.OK).body(jwt);
@@ -29,5 +30,6 @@ public class MemberController {
     public String signup(@RequestBody @Valid MemberDto memberDto){
         return memberService.signupMember(memberDto);
     }
+
 
 }
