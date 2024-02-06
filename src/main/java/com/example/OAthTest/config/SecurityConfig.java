@@ -4,6 +4,7 @@ import com.example.OAthTest.jwt.JwtFilter;
 import com.example.OAthTest.jwt.JwtProvider;
 import com.example.OAthTest.service.JwtLoginService;
 import com.example.OAthTest.service.MemberDetailService;
+import com.example.OAthTest.service.Oath2LoginService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,11 +25,12 @@ import org.springframework.stereotype.Component;
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final MemberDetailService memberDetailService;
-
-    public SecurityConfig(JwtProvider jwtProvider, MemberDetailService memberDetailService) {
+    private final Oath2LoginService oath2LoginService;
+    public SecurityConfig(JwtProvider jwtProvider, MemberDetailService memberDetailService, Oath2LoginService oath2LoginService) {
         this.jwtProvider = jwtProvider;
 
         this.memberDetailService = memberDetailService;
+        this.oath2LoginService = oath2LoginService;
     }
     @Bean
     protected AuthenticationProvider authenticationProvider() {
@@ -51,9 +53,9 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(o->o.userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(oath2LoginService)))
                 .authorizeHttpRequests(req->req.anyRequest().permitAll())
-                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

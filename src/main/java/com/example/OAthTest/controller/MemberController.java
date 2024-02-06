@@ -21,6 +21,7 @@ public class MemberController {
         this.memberService = memberService;
         this.jwtLoginService = jwtLoginService;
     }
+
     @PostMapping("/login")
     public ResponseEntity<JwtDto> login(@RequestBody MemberDto memberDto){
         JwtDto jwt = jwtLoginService.loginMember(memberDto);

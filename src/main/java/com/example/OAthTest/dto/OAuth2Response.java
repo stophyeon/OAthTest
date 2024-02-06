@@ -1,4 +1,7 @@
 package com.example.OAthTest.dto;
 
-public class OAuth2Response {
+public interface OAuth2Response {
+    public String getProvider();
+    public String getEmail();
+    public String getName();
 }
