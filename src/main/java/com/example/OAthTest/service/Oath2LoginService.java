@@ -30,7 +30,7 @@ public class Oath2LoginService extends DefaultOAuth2UserService {
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
         }
         else if (registrationId.equals("kakao")) {
-
+            log.info("kakao loadUser 호출");
             oAuth2Response = new KakaoResponse(oAuth2User.getAttributes());
         }
         else {
