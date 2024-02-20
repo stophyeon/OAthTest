@@ -23,8 +23,8 @@ public class MemberService {
     }
 
     public String signupMember(MemberDto memberDto){
-        Member member = memberRepository.findByEmail(memberDto.getEmail());
-        if (member!=null){
+
+        if (memberRepository.findByEmail(memberDto.getEmail()).isPresent()){
            return "이미 가입되어 있습니다.";
         }
         else{

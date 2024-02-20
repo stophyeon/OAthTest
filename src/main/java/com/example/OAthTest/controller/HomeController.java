@@ -21,10 +21,11 @@ public class HomeController {
     public String index(@RequestParam("code") String code) throws JsonProcessingException {
         return kakaoLoginService.getToken(code);
     }
-    @GetMapping("/logout")
-    public void logout(){
-        kakaoLoginService.logOutMember();
+    @GetMapping("/oauth2/insta")
+    public String instagram(@RequestParam("code") String code) throws JsonProcessingException {
+        return kakaoLoginService.getToken(code);
     }
+
     @GetMapping("/info")
     public String MemberInfo() throws ParseException {
 

@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @Slf4j
@@ -42,20 +43,19 @@ public class KakaoService {
         kakaoToken=objectMapper.readValue(kakaoFeignClient.getAccessToken(Content_type,grant_type,client_id,login_redirect,code), KakaoToken.class);
         return kakaoToken.toString();
     }
-    public void logOutMember(){
 
-        kakaoFeignClient.logOut(client_id, logout_redirect);
-    }
     public Member getInfo() throws ParseException {
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(kakaoApi.getUSerInfo("Bearer "+kakaoToken.getAccessToken()));
         JSONObject properties = (JSONObject) jsonObject.get("properties");
+        log.info(properties.toString());
         JSONObject account = (JSONObject) jsonObject.get("kakao_account");
+        log.info(account.toString());
         Member member=Member.builder()
                 .name(properties.get("nickname").toString())
                 .email(account.get("email").toString())
                 .build();
-        memberRepository.save(member);
+        if (memberRepository.findByEmail(member.getEmail()).isEmpty()){memberRepository.save(member);}
         return member;
     }
 }

@@ -27,7 +27,7 @@ public class MemberDetailService implements UserDetailsService {
     @Override
     public MemberDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member member=Optional.ofNullable(memberRepository.findByEmail(username)).orElseThrow(()->new UsernameNotFoundException("회원가입이 되있지 않았습니다"));
+        Member member=Optional.of(memberRepository.findByEmail(username).get()).orElseThrow(()->new UsernameNotFoundException("회원가입이 되있지 않았습니다"));
         log.info(member.getPassword());
         log.info("MemberDetailService 메서드");
 
